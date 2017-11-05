@@ -17,9 +17,11 @@
 package com.hpe.application.automation.tools.octane.events;
 
 import com.google.inject.Inject;
+import com.hpe.application.automation.tools.octane.configuration.ConfigurationService;
 import com.hpe.application.automation.tools.octane.tests.TestListener;
 import hudson.Extension;
-import hudson.model.*;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 
 import javax.annotation.Nonnull;
@@ -34,6 +36,10 @@ public class TestListenerImpl extends RunListener<Run> {
 
 	@Override
 	public void onCompleted(Run r, @Nonnull TaskListener listener) {
+		if(ConfigurationService.getModel().isSuspend()){
+			return;
+		}
+
 		testListener.processBuild(r, listener);
 	}
 }
